@@ -3,6 +3,7 @@
 	"comment": "",
 	"ignore": "test",
 	"package": [],
-	"rootPath": "markusja1-assignment1"
+	"rootPath": "markusja1-assignment1",
+  "GoVersion": "go1.8"
 
 }
