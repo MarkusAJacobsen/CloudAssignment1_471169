@@ -4,6 +4,7 @@
 	"ignore": "test",
 	"package": [],
 	"rootPath": "markusja1-assignment1",
-  "heroku.goVersion": "go1.8"
-
+  "heroku": {
+            goVersion": "go1.8"
+   }
 }
