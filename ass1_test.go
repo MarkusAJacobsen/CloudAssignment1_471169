@@ -51,14 +51,14 @@ func TestGetURL(t *testing.T) {
 	expected := "https://api.github.com/repos/apache/kafka"
 	actual, _ := getURL(test, "")
 	if actual != expected {
-		t.Error("Get URL did not function as expected")
+		t.Error("GetURL did not function as expected, case 1")
 	}
 
 	/*Should return a valid URL*/
 	expected = "https://api.github.com/repos/apache/kafka/languages"
 	actual, _ = getURL(test, "contributors")
 	if actual != expected {
-		t.Error("getURL did not function as expected")
+		t.Error("getURL did not function as expected, case 2")
 	}
 
 	/*Should return -1, incorrect URL*/
@@ -66,13 +66,13 @@ func TestGetURL(t *testing.T) {
 	expected2 := -1
 	_, err := getURL(test, "")
 	if err != expected2 {
-		t.Error("getURL did not function as expected")
+		t.Error("getURL did not function as expected, case 3")
 	}
 
 	/*Should return -1, incorrect URL*/
 	_, err = getURL(test, "contributors")
 	if err != expected2 {
-		t.Error("getURL did not function as expected")
+		t.Error("getURL did not function as expected, case 4")
 	}
 }
 

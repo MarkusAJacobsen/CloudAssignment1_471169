@@ -5,27 +5,28 @@ import (
 	"fmt"
 	"io/ioutil"
 	"net/http"
+	"os"
 	"strings"
 	"unicode"
 )
 
 //ResponsePayload represents root in github api
 type ResponsePayload struct {
-	Name       string   `json: "name"`
-	Owner      Owne     `json: "owner"`
-	CommitInfo Commit   `json: "contributors_url"`
-	Languages  []string `json: "language"`
+	Name       string
+	Owner      Owne
+	CommitInfo Commit
+	Languages  []string
 }
 
 //Owne object from github
 type Owne struct {
-	Login string `json: "login"`
+	Login string
 }
 
 //Commit object from github
 type Commit struct {
-	Login         string `json: "login"`
-	Contributions int    `json: "contributions"`
+	Login         string
+	Contributions int
 }
 
 //Redirect here is url: localhost:8080 is supplied
@@ -150,13 +151,14 @@ func getData(url string, payload interface{}) error {
 	if err := json.NewDecoder(response.Body).Decode(payload); err != nil {
 		return err
 	}
-	return nil
+	return err
 }
 
 func main() {
+	port := os.Getenv("PORT")
 	http.HandleFunc("/", startPage)
 	http.HandleFunc("/projectinfo/v1/", infoPage)
-	panic(http.ListenAndServe(":8080", nil))
+	panic(http.ListenAndServe(":"+port, nil))
 }
 
 /* Reference material:
