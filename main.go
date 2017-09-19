@@ -4,6 +4,7 @@ import (
 	"encoding/json"
 	"fmt"
 	"io/ioutil"
+	"log"
 	"net/http"
 	"os"
 	"strings"
@@ -156,6 +157,9 @@ func getData(url string, payload interface{}) error {
 
 func main() {
 	port := os.Getenv("PORT")
+	if port == "" {
+		log.Fatal("$PORT must be set")
+	}
 	http.HandleFunc("/", startPage)
 	http.HandleFunc("/projectinfo/v1/", infoPage)
 	panic(http.ListenAndServe(":"+port, nil))

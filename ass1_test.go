@@ -55,7 +55,7 @@ func TestGetURL(t *testing.T) {
 	}
 
 	/*Should return a valid URL*/
-	expected = "https://api.github.com/repos/apache/kafka/languages"
+	expected = "https://api.github.com/repos/apache/kafka/contributors"
 	actual, _ = getURL(test, "contributors")
 	if actual != expected {
 		t.Error("getURL did not function as expected, case 2")
