@@ -1,4 +1,4 @@
-GO_BUILD-ENV := CGO_ENABLED=0 GOOS=linux GOARCH=intel64
+GO_BUILD-ENV := CGO_ENABLED=0 GOOS=linux GOARCH=amd64
 DOCKER_BUILD=$(shell pwd)/.docker_build
 DOCKER_CMD=$(DOCKER_BUILD)/get-git-data
 
