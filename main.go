@@ -82,9 +82,12 @@ func infoPage(w http.ResponseWriter, r *http.Request) {
 		generalInfo.CommitInfo.Contributions = 0
 	}
 
-	//toArray(lang)
-	for r := range *lang {
-		generalInfo.Languages = append(generalInfo.Languages, r)
+	if len(*lang) != 0 {
+		for r := range *lang {
+			generalInfo.Languages = append(generalInfo.Languages, r)
+		}
+	} else {
+		generalInfo.Languages[0] = "No languages registered"
 	}
 
 	/*Encode struct and print it on screen*/
