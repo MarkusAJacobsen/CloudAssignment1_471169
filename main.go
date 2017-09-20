@@ -88,7 +88,7 @@ func infoPage(w http.ResponseWriter, r *http.Request) {
 	}
 
 	/*Encode struct and print it on screen*/
-	if !incomplete {
+	if incomplete != false {
 		status := 404
 		http.Error(w, http.StatusText(status), status)
 		return
