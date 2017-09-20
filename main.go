@@ -57,18 +57,17 @@ func infoPage(w http.ResponseWriter, r *http.Request) {
 
 	/*Fetch data*/
 	if error := getData(requestProjectURL, generalInfo); error != nil {
-		printError(w, error)
+		//printError(w, error)
 		incomplete = true
 	}
 
 	if error := getData(requestContributorsURL, contribution); error != nil {
-		printError(w, error)
+		//printError(w, error)
 		incomplete = true
 	}
 
-	//lang := getLang(w, requestLanguagesURL)
 	if error := getData(requestLanguagesURL, lang); error != nil {
-		printError(w, error)
+		//printError(w, error)
 		incomplete = true
 	}
 
