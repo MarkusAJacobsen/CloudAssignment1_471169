@@ -124,6 +124,7 @@ func returnResponse(w http.ResponseWriter, r interface{}) {
 	if err != nil {
 		printError(w, err)
 	}
+	w.Header().Set("Content-type", "application/json")
 	fmt.Fprintf(w, "%s\n", b)
 }
 
