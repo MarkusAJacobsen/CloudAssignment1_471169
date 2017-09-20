@@ -1,7 +1,6 @@
 package main
 
 import (
-	//////////////	"net/http"
 	"testing"
 )
 
@@ -76,4 +75,13 @@ func TestGetURL(t *testing.T) {
 	}
 }
 
-/*TODO getData */
+func TestGetData(t *testing.T) {
+	payload := &ResponsePayload{}
+	url := "https://api.github.com/repos/apache/kafka"
+
+	/*Test case should pass*/
+	exists := getData(url, payload)
+	if exists != nil {
+		t.Error("Expected this error to be zero")
+	}
+}
