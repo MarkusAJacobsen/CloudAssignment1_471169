@@ -18,14 +18,14 @@ import (
 	Languages: []string{"Batchfile", "HTML", "Java", "Python", "Scala", "Shell", "XSLT"},
 }*/
 
-func TestStringToArray(t *testing.T) {
+/*func TestStringToArray(t *testing.T) {
 	test := "!! foo, bar, 21321,    baz"
 	expected := []string{"foo", "bar", "baz"}
 	actual := toArray(test)
 	if actual[0] != expected[0] && actual[1] != expected[1] && actual[2] != expected[2] {
 		t.Error("Expected and actual does not match")
 	}
-}
+}*/
 
 func TestCheckLength(t *testing.T) {
 	/*case valid*/

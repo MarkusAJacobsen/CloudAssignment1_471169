@@ -3,12 +3,12 @@ package main
 import (
 	"encoding/json"
 	"fmt"
-	"io/ioutil"
-	"log"
+	//"io/ioutil"
+	//	"log"
 	"net/http"
-	"os"
+	//	"os"
 	"strings"
-	"unicode"
+	//"unicode"
 )
 
 //ResponsePayload represents root in github api
@@ -53,21 +53,37 @@ func infoPage(w http.ResponseWriter, r *http.Request) {
 	/*Set up data types*/
 	contribution := new([1]Commit)
 	generalInfo := &ResponsePayload{}
+	lang := new(map[string]interface{})
 
 	/*Fetch data*/
-	if error := getData(requestContributorsURL, contribution); error != nil {
-		printError(w, error)
-	}
 	if error := getData(requestProjectURL, generalInfo); error != nil {
 		printError(w, error)
 	}
 
-	lang := getLang(w, requestLanguagesURL)
+	if error := getData(requestContributorsURL, contribution); error != nil {
+		printError(w, error)
+	}
 
-	/*Append contribution structs data to generalInfo Struct*/
-	generalInfo.CommitInfo.Login = contribution[0].Login
-	generalInfo.CommitInfo.Contributions = contribution[0].Contributions
-	generalInfo.Languages = toArray(lang)
+	//lang := getLang(w, requestLanguagesURL)
+	if error := getData(requestLanguagesURL, lang); error != nil {
+		printError(w, error)
+	}
+
+	/*Append contribution struct data to generalInfo Struct
+	 * If no commits, give verbose message instead of ""
+	 */
+	if contribution[0].Login != "" {
+		generalInfo.CommitInfo.Login = contribution[0].Login
+		generalInfo.CommitInfo.Contributions = contribution[0].Contributions
+	} else {
+		generalInfo.CommitInfo.Login = "No commits registered"
+		generalInfo.CommitInfo.Contributions = 0
+	}
+
+	//toArray(lang)
+	for r := range *lang {
+		generalInfo.Languages = append(generalInfo.Languages, r)
+	}
 
 	/*Encode struct and print it on screen*/
 	returnResponse(w, generalInfo)
@@ -86,9 +102,8 @@ func getURL(u string, postfix string) (string, int) {
 	}
 	if postfix != "" {
 		return (base + parts[4] + "/" + parts[5] + "/" + postfix), 0
-	} else {
-		return (base + parts[4] + "/" + parts[5]), 0
 	}
+	return (base + parts[4] + "/" + parts[5]), 0
 }
 
 func checkLength(s []string, length int) bool {
@@ -96,14 +111,6 @@ func checkLength(s []string, length int) bool {
 		return false
 	}
 	return true
-}
-
-/*Strip away any non letter characters from a string, and return array*/
-func toArray(s string) []string {
-	f := func(c rune) bool {
-		return !unicode.IsLetter(c)
-	}
-	return strings.FieldsFunc(s, f)
 }
 
 /*printError prints an error message on the screen*/
@@ -120,49 +127,28 @@ func returnResponse(w http.ResponseWriter, r interface{}) {
 	fmt.Fprintf(w, "%s\n", b)
 }
 
-func getLang(w http.ResponseWriter, url string) string {
-	response, err := http.Get(url)
-	if err != nil {
-		printError(w, err)
-	}
-	defer response.Body.Close()
-	lang, err := ioutil.ReadAll(response.Body)
-	if err != nil {
-		printError(w, err)
-	}
-
-	/*Following code snippet courtesy:
-	 * https://stackoverflow.com/questions/40429296/converting-string-to-json-or-struct-in-golang
-	 */
-	in := []byte(lang)
-	var raw map[string]interface{}
-	json.Unmarshal(in, &raw)
-	out, _ := json.Marshal(raw)
-	return string(out)
-}
-
 /*getData takes in a url and an interface, decodes the response and puts it in the interface*/
 func getData(url string, payload interface{}) error {
 	response, err := http.Get(url)
 	if err != nil {
 		return err
 	}
-
 	defer response.Body.Close()
-	if err := json.NewDecoder(response.Body).Decode(payload); err != nil {
+	if err := json.NewDecoder(response.Body).Decode(&payload); err != nil {
 		return err
 	}
 	return err
 }
 
 func main() {
-	port := os.Getenv("PORT")
-	if port == "" {
-		log.Fatal("$PORT must be set")
-	}
+	/*	port := os.Getenv("PORT")
+		if port == "" {
+			log.Fatal("$PORT must be set")
+		}*/
 	http.HandleFunc("/", startPage)
 	http.HandleFunc("/projectinfo/v1/", infoPage)
-	panic(http.ListenAndServe(":"+port, nil))
+	//	panic(http.ListenAndServe(":"+port, nil))
+	panic(http.ListenAndServe(":8080", nil))
 }
 
 /* Reference material:
