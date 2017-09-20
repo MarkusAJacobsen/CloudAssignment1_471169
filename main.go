@@ -36,7 +36,7 @@ func startPage(w http.ResponseWriter, r *http.Request) {
 }
 
 func infoPage(w http.ResponseWriter, r *http.Request) {
-
+	incomplete := false
 	/*Configure request URLs*/
 	var requestProjectURL, requestContributorsURL, requestLanguagesURL string
 	var err0, err1, err2 int
@@ -58,15 +58,18 @@ func infoPage(w http.ResponseWriter, r *http.Request) {
 	/*Fetch data*/
 	if error := getData(requestProjectURL, generalInfo); error != nil {
 		printError(w, error)
+		incomplete = true
 	}
 
 	if error := getData(requestContributorsURL, contribution); error != nil {
 		printError(w, error)
+		incomplete = true
 	}
 
 	//lang := getLang(w, requestLanguagesURL)
 	if error := getData(requestLanguagesURL, lang); error != nil {
 		printError(w, error)
+		incomplete = true
 	}
 
 	/*Append contribution struct data to generalInfo Struct
@@ -86,6 +89,11 @@ func infoPage(w http.ResponseWriter, r *http.Request) {
 	}
 
 	/*Encode struct and print it on screen*/
+	if !incomplete {
+		status := 404
+		http.Error(w, http.StatusText(status), status)
+		return
+	}
 	returnResponse(w, generalInfo)
 }
 
