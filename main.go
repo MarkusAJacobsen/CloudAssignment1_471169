@@ -4,9 +4,9 @@ import (
 	"encoding/json"
 	"fmt"
 	//"io/ioutil"
-	//	"log"
+	"log"
 	"net/http"
-	//	"os"
+	"os"
 	"strings"
 	//"unicode"
 )
@@ -141,14 +141,14 @@ func getData(url string, payload interface{}) error {
 }
 
 func main() {
-	/*	port := os.Getenv("PORT")
-		if port == "" {
-			log.Fatal("$PORT must be set")
-		}*/
+	port := os.Getenv("PORT")
+	if port == "" {
+		log.Fatal("$PORT must be set")
+	}
 	http.HandleFunc("/", startPage)
 	http.HandleFunc("/projectinfo/v1/", infoPage)
-	//	panic(http.ListenAndServe(":"+port, nil))
-	panic(http.ListenAndServe(":8080", nil))
+	panic(http.ListenAndServe(":"+port, nil))
+	//panic(http.ListenAndServe(":8080", nil))
 }
 
 /* Reference material:
